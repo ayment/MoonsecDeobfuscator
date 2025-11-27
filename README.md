@@ -3,6 +3,7 @@ Originally From [MoonsecDeobfuscator](https://github.com/tupsutumppu/MoonsecDeob
 All credit for the actual deobfuscation engine goes to the original author.
 My contribution is providing a simple, user-friendly interface and adding decompilation support.
 
+The Lua Decompiler that I used
 [Lua Decompiler](https://luadec.metaworm.site/)
 
 # Requirements
