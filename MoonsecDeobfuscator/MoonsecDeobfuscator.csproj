@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+    <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
+    <PackageReference Include="NLua" Version="1.7.6" />
+    <PackageReference Include="QuikGraph" Version="2.5.0" />
+  </ItemGroup>
+
+
+	<Target Name="OrganizeBuildOutput" AfterTargets="Build;AfterBuild;PostBuildEvent">
+		<PropertyGroup>
+			<BinFolder>$(OutputPath)Dlls\</BinFolder>
+		</PropertyGroup>
+
+		<MakeDir Directories="$(BinFolder)" />
+		<MakeDir Directories="$(OutputPath)Deobfuscated\" />
+		<MakeDir Directories="$(OutputPath)Disassembled\" />
+
+		<ItemGroup>
+			<DllsToMove Include="$(OutputPath)*.dll"
+						Exclude="$(OutputPath)$(AssemblyName).dll" />
+			<JsonToMove Include="$(OutputPath)*.json"
+						Exclude="$(OutputPath)$(AssemblyName).runtimeconfig.json;$(OutputPath)$(AssemblyName).deps.json" />
+			<PdbToMove Include="$(OutputPath)*.pdb"
+					   Exclude="$(OutputPath)$(AssemblyName).pdb" />
+			<XmlToMove Include="$(OutputPath)*.xml" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(DllsToMove)" DestinationFolder="$(BinFolder)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(JsonToMove)" DestinationFolder="$(BinFolder)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(PdbToMove)" DestinationFolder="$(BinFolder)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(XmlToMove)" DestinationFolder="$(BinFolder)" SkipUnchangedFiles="true" />
+
+		<Delete Files="@(DllsToMove)" />
+		<Delete Files="@(JsonToMove)" />
+		<Delete Files="@(PdbToMove)" />
+		<Delete Files="@(XmlToMove)" />
+	</Target>
+</Project>
